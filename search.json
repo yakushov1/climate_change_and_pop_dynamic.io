@@ -529,5 +529,16 @@
       "Связь климатических изменений и динамики популяций",
       "Сравнение метеоусловий при циклических и нециклических колебаниях"
     ]
+  },
+  {
+    "objectID": "3_3_compare_conditions.html#модель-градиентного-бустинга",
+    "href": "3_3_compare_conditions.html#модель-градиентного-бустинга",
+    "title": "Сравнение метеоусловий при циклических и нециклических колебаниях",
+    "section": "Модель градиентного бустинга",
+    "text": "Модель градиентного бустинга\nИмпорт необходимы библиотек\nimport pandas as pd\nfrom catboost import CatBoostClassifier\nfeat_import_total = []\nfrom catboost import Pool\nimport shap\nimport matplotlib.pyplot as pl\nimport matplotlib\nfrom matplotlib.ticker import NullLocator\nНепосредственно модель\nX = data.drop(['Period'], axis=1)\ny = data['Period']\n\nmodel = CatBoostClassifier(loss_function='CrossEntropy', depth=3, learning_rate = 0.02, iterations=300, \n        random_seed=18, \n        od_type='Iter',\n        od_wait=20,\n        bootstrap_type='Bernoulli'\n    )\n\nmodel.fit(\n        X, y,\n        verbose=False,  \n        plot=False\n    )\nprint(model.best_score_)\n    \npool1 = Pool(X, y)\nshap_values_short=model.get_feature_importance(pool1, fstr_type='ShapValues')\n    \n\nexplainer_short = shap.TreeExplainer(model)\nshap_values_short=explainer_short.shap_values(Pool(X, y))\nГрафик индексов Шэпли\nshap.summary_plot(shap_values_short, X, show=False, color_bar = False, plot_type = 'violin',\n                      color_bar_label=None,\n                      max_display=3,\n                      plot_size=[5,3])\npl.xlabel(\"Коэффициент Шэпли\")\npl.savefig('cyclic_XX_XXI_compare.jpg', format='jpg', dpi=500, bbox_inches='tight')",
+    "crumbs": [
+      "Связь климатических изменений и динамики популяций",
+      "Сравнение метеоусловий при циклических и нециклических колебаниях"
+    ]
   }
 ]
